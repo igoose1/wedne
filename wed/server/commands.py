@@ -10,3 +10,7 @@ class CommandSchema(pydantic.BaseModel):
         description="social_media_id user before current command",
     )
     when: datetime.datetime
+
+
+class PreciseCommandSchema(CommandSchema):
+    expected_in: datetime.timedelta

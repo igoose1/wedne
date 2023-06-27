@@ -43,6 +43,21 @@ class VisitDAO:
         with database:
             return list(VisitModel.select().where(VisitModel.when >= from_))
 
+    def get_command(
+        self,
+        from_: datetime,
+        social_media_id: int,
+    ) -> None | Dict[str, Any]:
+        with database:
+            visit: VisitModel | None = (
+                VisitModel.select(VisitModel.command)
+                .where(VisitModel.social_media_id == social_media_id)
+                .where(VisitModel.when >= from_)
+                .where(VisitModel.command.is_null(False))
+                .get_or_none()
+            )
+        return None if visit is None else visit.command  # type: ignore
+
     def get_commanded(self, from_: datetime) -> List[VisitModel]:
         with database:
             return list(
