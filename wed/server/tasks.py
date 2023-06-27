@@ -46,7 +46,7 @@ def order_new_commands() -> None:
         chosen = choose_randoms_to_order(dao)
     except ValueError:
         raise
-    when = datetime.utcnow() + timedelta(minutes=settings.minutes_of_delay)
+    when = datetime.utcnow() + timedelta(seconds=settings.seconds_of_delay)
     for idx, letter in enumerate(settings.tower):
         command = CommandSchema(
             letter=letter,

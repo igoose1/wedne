@@ -3,7 +3,7 @@ import pydantic
 
 class Settings(pydantic.BaseSettings):
     minutes_to_order: int
-    minutes_of_delay: int
+    seconds_of_delay: int
     minutes_of_last_activity: int
     job_queue_database: str
     tower: str = "ITSWEDNESDAYMYDUDES"
