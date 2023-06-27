@@ -4,7 +4,7 @@ from typing import Callable, Dict, Hashable, Iterable, List, Sequence, TypeVar
 
 import huey
 
-from wed.server.commands import CommandSchema
+from wed.commands import CommandSchema
 from wed.server.db import VisitDAO, VisitModel
 from wed.server.settings import settings
 

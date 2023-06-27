@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import fastapi
 import pydantic
 
-from wed.server.commands import CommandSchema, PreciseCommandSchema
+from wed.commands import CommandSchema, PreciseCommandSchema
 from wed.server.db import VisitDAO
 from wed.server.settings import settings
 from wed.server.tasks import create_new_visit
