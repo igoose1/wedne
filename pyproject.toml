@@ -26,6 +26,36 @@ black = "^23.3.0"
 pyright = "^1.1.316"
 pre-commit = "^3.3.3"
 autoflake = "^2.2.0"
+ruff = "^0.0.280"
+
+[tool.ruff]
+select = [
+	"E",
+	"F",
+	"C90",
+	"I",
+	"N",
+	"YTT",
+	"ASYNC",
+	"S",
+	"COM",
+	"CPY",
+	"C4",
+	"EM",
+	"ISC",
+	"ICN",
+	"G",
+	"INP",
+	"PIE",
+	"RET",
+	"SIM",
+	"TID",
+	"PTH",
+	"TD",
+	"PL",
+	"RUF",
+	"UP",
+]
 
 [build-system]
 requires = ["poetry-core"]

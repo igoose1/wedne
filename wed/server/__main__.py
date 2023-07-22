@@ -45,5 +45,7 @@ class Main:
 
 
 if __name__ == "__main__":
-    fire.core.Display = lambda lines, out: out.write("\n".join(lines) + "\n")  # type: ignore
+    fire.core.Display = lambda lines, out: out.write(  # type: ignore
+        "\n".join(lines) + "\n",
+    )
     fire.Fire(Main(), name="wed.server")

@@ -1,7 +1,8 @@
 import json
+from collections.abc import Hashable
 from datetime import datetime
 from functools import partial
-from typing import Any, Dict, Hashable, List
+from typing import Any
 
 import peewee
 from playhouse.sqlite_ext import JSONField
@@ -13,7 +14,7 @@ class AutoFieldType(int, peewee.AutoField):
     pass
 
 
-class JSONFieldType(Dict[Hashable, Any], JSONField):
+class JSONFieldType(dict[Hashable, Any], JSONField):
     pass
 
 
@@ -35,11 +36,11 @@ class VisitDAO:
         with database:
             return VisitModel.create(when=time, social_media_id=social_media_id)
 
-    def update_command(self, id: int, command: Dict[str, Any]) -> None:
+    def update_command(self, id: int, command: dict[str, Any]) -> None:
         with database:
             VisitModel.update(command=command).where(VisitModel.id == id).execute()
 
-    def get_from(self, from_: datetime) -> List[VisitModel]:
+    def get_from(self, from_: datetime) -> list[VisitModel]:
         with database:
             return list(VisitModel.select().where(VisitModel.when >= from_))
 
@@ -47,7 +48,7 @@ class VisitDAO:
         self,
         from_: datetime,
         social_media_id: int,
-    ) -> None | Dict[str, Any]:
+    ) -> None | dict[str, Any]:
         with database:
             visit: VisitModel | None = (
                 VisitModel.select(VisitModel.command)
@@ -58,7 +59,7 @@ class VisitDAO:
             )
         return None if visit is None else visit.command  # type: ignore
 
-    def get_commanded(self, from_: datetime) -> List[VisitModel]:
+    def get_commanded(self, from_: datetime) -> list[VisitModel]:
         with database:
             return list(
                 VisitModel.select()

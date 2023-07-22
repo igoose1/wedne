@@ -1,6 +1,7 @@
 import random
+from collections.abc import Callable, Hashable, Iterable, Sequence
 from datetime import datetime, timedelta
-from typing import Callable, Dict, Hashable, Iterable, List, Sequence, TypeVar
+from typing import TypeVar
 
 import huey
 
@@ -21,11 +22,11 @@ T_ = TypeVar("T_")
 
 
 def distinct_on(seq: Iterable[T_], key: Callable[[T_], Hashable]) -> Sequence[T_]:
-    unique: Dict[Hashable, T_] = {key(element): element for element in seq}
-    return [val for val in unique.values()]
+    unique: dict[Hashable, T_] = {key(element): element for element in seq}
+    return list(unique.values())
 
 
-def choose_randoms_to_order(dao: VisitDAO) -> List[VisitModel]:
+def choose_randoms_to_order(dao: VisitDAO) -> list[VisitModel]:
     """Raises ValueError if there are not sufficient candidates."""
     active = dao.get_from(
         datetime.utcnow() - timedelta(minutes=settings.minutes_of_last_activity),

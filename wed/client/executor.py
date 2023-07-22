@@ -1,12 +1,12 @@
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from wed.commands import CommandSchema
 
 
 class Executor:
-    def __init__(self, raw: Dict[str, Any]):
+    def __init__(self, raw: dict[str, Any]):
         self.command = CommandSchema.parse_obj(raw)
 
     def __call__(self) -> None:
