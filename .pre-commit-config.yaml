@@ -1,3 +1,4 @@
+---
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v2.4.0
@@ -7,29 +8,25 @@ repos:
   - id: check-toml
   - id: end-of-file-fixer
 
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.0.280
+  hooks:
+  - id: ruff
+    args: [--fix, --exit-non-zero-on-fix]
+
 - repo: https://github.com/asottile/add-trailing-comma
   rev: v2.1.0
   hooks:
   - id: add-trailing-comma
 
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.1.0
+- repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+  rev: 0.2.3
   hooks:
-  - id: pretty-format-yaml
-    args:
-    - --autofix
-    - --preserve-quotes
-    - --indent=2
+  - id: yamlfmt
+    args: [--mapping, '2', --sequence, '2', --offset, '0']
 
 - repo: local
   hooks:
-  - id: autoflake
-    name: Edit with autoflake
-    entry: poetry run autoflake
-    language: system
-    types: [python]
-    args: [--in-place, --remove-all-unused-imports, --remove-duplicate-keys]
-
   - id: isort
     name: Format with isort
     entry: poetry run isort
@@ -49,10 +46,3 @@ repos:
     args: [wed]
     language: system
     types: [python]
-
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
-  rev: v0.0.280
-  hooks:
-  - id: ruff
-    args: [--fix, --exit-non-zero-on-fix]
