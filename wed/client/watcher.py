@@ -1,6 +1,7 @@
 import time
 from dataclasses import dataclass
 from functools import singledispatchmethod
+from importlib import metadata
 
 import httpx
 
@@ -13,13 +14,17 @@ class Watcher:
     seconds_of_delay: int
     social_media_id: int
 
+    def __post_init__(self) -> None:
+        version = metadata.version("wed")
+        self.client = httpx.Client(headers={"user-agent": f"wed.client/{version}"})
+
     def __call__(self) -> None:
         data = {
             "social_media_id": self.social_media_id,
         }
         while True:
             try:
-                response = httpx.post(
+                response = self.client.post(
                     self.endpoint,
                     json=data,
                 )
