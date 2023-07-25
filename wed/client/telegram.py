@@ -72,11 +72,11 @@ class TelegramTowerBuilder:
         )
 
     async def process_command(self, command: CommandSchema):
+        await asyncio.sleep(
+            (command.when - datetime.datetime.now(pytz.utc)).seconds,
+        )
         if command.after is None:
             # if it's the first letter, wait here and write a message
-            await asyncio.sleep(
-                (command.when - datetime.datetime.now(pytz.utc)).seconds,
-            )
             await asyncio.sleep(WRITE_FIRST_DELAY.seconds)
             await self._client.send_message(self._chat_id, command.letter)
         else:
