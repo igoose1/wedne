@@ -17,12 +17,11 @@ def get_handler(shared_command: SharedCommand):
             # no pending command
             print("no pending")
             return
-        if command.when < datetime.datetime.now(pytz.utc):
+        if command.when > datetime.datetime.now(pytz.utc):
             # it's too early by time
             print("too early by time")
-            print(command.when)
             return
-        if command.after is not None and command.after != event.from_id:
+        if command.after is not None and command.after != event.from_id.user_id:
             # it's still early by letter order
             print("too early by letter order")
             return
