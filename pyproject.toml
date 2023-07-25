@@ -58,6 +58,9 @@ select = [
 	"RUF",
 	"UP",
 ]
+ignore = [
+	"TD003",
+]
 
 [build-system]
 requires = ["poetry-core"]

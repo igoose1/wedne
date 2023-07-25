@@ -1,11 +1,12 @@
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import singledispatchmethod
 from importlib import metadata
 
 import httpx
 
-from wed.client.executor import Executor
+from wed.commands import CommandSchema
 
 
 @dataclass
@@ -13,6 +14,7 @@ class Watcher:
     endpoint: str
     seconds_of_delay: int
     social_media_id: int
+    command_processor: Callable[[CommandSchema], None]
 
     def __post_init__(self) -> None:
         version = metadata.version("wed")
@@ -47,8 +49,10 @@ class Watcher:
             return
 
         raw_command = response.json()
-        if raw_command is not None:
-            Executor(raw_command)()
+        if raw_command is None:
+            return
+        command = CommandSchema.parse_obj(raw_command)
+        self.command_processor(command)  # there's time.sleep
 
     @process.register
     def _(self, exception: httpx.ConnectError) -> None:
