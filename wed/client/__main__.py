@@ -1,4 +1,6 @@
 import multiprocessing
+import os
+import signal
 
 import fire
 
@@ -20,22 +22,29 @@ class Main:
             API_HASH,
             chat_id,
         )
-        watcher = Watcher(
-            endpoint,
-            seconds_of_delay=seconds_of_delay,
-            social_media_id=telegram_tower_builder.whoami(),
-            command_processor=telegram_tower_builder.process_command,
-        )
+        self_id_receiver, self_id_sender = multiprocessing.Pipe(duplex=False)
         monitor_process = multiprocessing.Process(
             target=telegram_tower_builder.monitor,
+            args=(self_id_sender,),
         )
         try:
             monitor_process.start()
+            watcher = Watcher(
+                endpoint,
+                seconds_of_delay=seconds_of_delay,
+                social_media_id=self_id_receiver.recv(),
+                command_processor=telegram_tower_builder.process_command,
+            )
             watcher()
         except KeyboardInterrupt:
-            print("bye!")
+            if monitor_process.pid is not None:
+                print("interrupt a process")
+                os.kill(monitor_process.pid, signal.SIGINT)
+                monitor_process.join(timeout=10)
         finally:
-            monitor_process.terminate()
+            if monitor_process.is_alive():
+                print("terminate a process")
+                monitor_process.terminate()
 
 
 if __name__ == "__main__":

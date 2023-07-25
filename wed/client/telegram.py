@@ -1,5 +1,6 @@
 import datetime
 import time
+from multiprocessing.connection import Connection
 
 import telethon
 
@@ -10,6 +11,7 @@ from wed.commands import CommandSchema
 def get_handler(shared_command: SharedCommand):
     async def handler(event) -> None:
         print(event)
+        print(shared_command.read())
         command = shared_command.read()
         if command is None:
             # no pending command
@@ -54,17 +56,16 @@ class TelegramTowerBuilder:
         self.__chat_id = chat_id
         self.__shared_command = SharedCommand()
 
-    def whoami(self) -> int:
-        me: telethon.types.User = self.__client.loop.run_until_complete(
-            self.__client.get_me(),  # type: ignore
-        )
-        return me.id
-
-    def monitor(self):
-        self.__client.start()
-        ChatMonitor(self.__client, self.__shared_command)(
-            self.__chat_id,
-        )
+    def monitor(self, self_id_conn: Connection) -> None:
+        # this method supposed to be launched as a subprocess
+        with self.__client:
+            me: telethon.types.User = self.__client.loop.run_until_complete(
+                self.__client.get_me(),  # type: ignore
+            )
+            self_id_conn.send(me.id)
+            ChatMonitor(self.__client, self.__shared_command)(
+                self.__chat_id,
+            )
 
     def process_command(self, command: CommandSchema):
         time.sleep((command.when - datetime.datetime.utcnow()).seconds)
