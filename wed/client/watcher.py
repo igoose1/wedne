@@ -15,7 +15,7 @@ class Watcher:
     endpoint: str
     delay: datetime.timedelta
     social_media_id: int
-    command_processor: Callable[[CommandSchema], Awaitable[None]]
+    command_processor: Callable[[CommandSchema | None], Awaitable[None]]
 
     async def __call__(self) -> None:
         version = metadata.version("wed")
@@ -54,10 +54,8 @@ class Watcher:
             return
 
         raw_command = response.json()
-        if raw_command is None:
-            return
-        command = CommandSchema.parse_obj(raw_command)
-        await self.command_processor(command)  # there's time.sleep
+        command = CommandSchema.parse_obj(raw_command) if raw_command else None
+        await self.command_processor(command)
 
     @process.register
     async def _(self, exception: httpx.ConnectError) -> None:

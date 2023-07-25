@@ -71,7 +71,10 @@ class TelegramTowerBuilder:
             self._chat_id,
         )
 
-    async def process_command(self, command: CommandSchema):
+    async def process_command(self, command: CommandSchema | None):
+        if command is None:
+            await self._shared_command.clear()
+            return
         await asyncio.sleep(
             (command.when - datetime.datetime.now(pytz.utc)).seconds,
         )
