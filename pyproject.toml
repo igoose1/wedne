@@ -11,6 +11,8 @@ pydantic = {extras = ["dotenv"], version = "^1.10.9"}
 fire = "^0.5.0"
 httpx = "^0.24.1"
 telethon = "^1.28.5"
+aiorun = "^2023.7.2"
+pytz = "^2023.3"
 
 
 [tool.poetry.group.server.dependencies]
@@ -57,6 +59,7 @@ select = [
 	"PL",
 	"RUF",
 	"UP",
+	"DTZ",
 ]
 ignore = [
 	"TD003",

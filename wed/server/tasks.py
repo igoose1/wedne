@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from typing import TypeVar
 
 import huey
+import pytz
 
 from wed.commands import CommandSchema
 from wed.server.db import VisitDAO, VisitModel
@@ -29,7 +30,7 @@ def distinct_on(seq: Iterable[T_], key: Callable[[T_], Hashable]) -> Sequence[T_
 def choose_randoms_to_order(dao: VisitDAO) -> list[VisitModel]:
     """Raises ValueError if there are not sufficient candidates."""
     active = dao.get_from(
-        datetime.utcnow() - timedelta(minutes=settings.minutes_of_last_activity),
+        datetime.now(pytz.utc) - timedelta(minutes=settings.minutes_of_last_activity),
     )
     return random.sample(
         distinct_on(active, lambda vis: vis.social_media_id),
@@ -47,7 +48,7 @@ def order_new_commands() -> None:
         chosen = choose_randoms_to_order(dao)
     except ValueError:
         raise
-    when = datetime.utcnow() + timedelta(seconds=settings.seconds_of_delay)
+    when = datetime.now(pytz.utc) + timedelta(seconds=settings.seconds_of_delay)
     for idx, letter in enumerate(settings.tower):
         command = CommandSchema(
             letter=letter,

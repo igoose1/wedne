@@ -1,5 +1,5 @@
-import time
-from collections.abc import Callable
+import asyncio
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from functools import singledispatchmethod
 from importlib import metadata
@@ -14,29 +14,33 @@ class Watcher:
     endpoint: str
     seconds_of_delay: int
     social_media_id: int
-    command_processor: Callable[[CommandSchema], None]
+    command_processor: Callable[[CommandSchema], Awaitable[None]]
 
-    def __post_init__(self) -> None:
+    async def __call__(self) -> None:
         version = metadata.version("wed")
-        self.client = httpx.Client(headers={"user-agent": f"wed.client/{version}"})
+        client = httpx.AsyncClient(headers={"user-agent": f"wed.client/{version}"})
+        try:
+            await self._watch(client)
+        finally:
+            await client.aclose()
 
-    def __call__(self) -> None:
+    async def _watch(self, client: httpx.AsyncClient) -> None:
         data = {
             "social_media_id": self.social_media_id,
         }
         while True:
             try:
-                response = self.client.post(
+                response = await client.post(
                     self.endpoint,
                     json=data,
                 )
-                self.process(response)
+                await self.process(response)
             except httpx.ConnectError as exc:
-                self.process(exc)
-            time.sleep(self.seconds_of_delay)
+                await self.process(exc)
+            await asyncio.sleep(self.seconds_of_delay)
 
     @singledispatchmethod
-    def process(self, response: httpx.Response) -> None:
+    async def process(self, response: httpx.Response) -> None:
         print(response)
         print(response.content)
 
@@ -52,8 +56,8 @@ class Watcher:
         if raw_command is None:
             return
         command = CommandSchema.parse_obj(raw_command)
-        self.command_processor(command)  # there's time.sleep
+        await self.command_processor(command)  # there's time.sleep
 
     @process.register
-    def _(self, exception: httpx.ConnectError) -> None:
+    async def _(self, exception: httpx.ConnectError) -> None:
         print(str(exception))

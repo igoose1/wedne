@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import fastapi
 import pydantic
+import pytz
 
 from wed.commands import CommandSchema, PreciseCommandSchema
 from wed.server.db import VisitDAO
@@ -20,7 +21,7 @@ def take_a_visit(
     data: VisitInputSchema,
     dao: VisitDAO = fastapi.Depends(),
 ) -> PreciseCommandSchema | None:
-    now = datetime.utcnow()
+    now = datetime.now(pytz.utc)
     create_new_visit(
         time=now,
         social_media_id=data.social_media_id,

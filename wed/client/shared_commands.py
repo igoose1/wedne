@@ -1,29 +1,21 @@
-import ctypes
-import multiprocessing
+import asyncio
 
 from wed.commands import CommandSchema
-
-COMMAND_LENGTH = 256  # we assume json's length of CommandSchema is less than 256
 
 
 class SharedCommand:
     def __init__(self):
-        self.__lock = multiprocessing.Lock()
-        self.__array = multiprocessing.Array(
-            ctypes.c_char,
-            COMMAND_LENGTH,
-        )
+        self._lock = asyncio.Lock()
+        self._command: CommandSchema | None = None
 
-    def write(self, command: CommandSchema) -> None:
-        with self.__lock:
-            self.__array.value = command.json().encode()  # type: ignore
+    async def write(self, command: CommandSchema) -> None:
+        async with self._lock:
+            self._command = command
 
-    def clear(self) -> None:
-        with self.__lock:
-            self.__array.value = b""  # type: ignore
+    async def clear(self) -> None:
+        async with self._lock:
+            self._command = None
 
-    def read(self) -> CommandSchema | None:
-        with self.__lock:
-            if not self.__array.value:  # type: ignore
-                return None
-            return CommandSchema.parse_raw(self.__array.value)  # type: ignore
+    async def read(self) -> CommandSchema | None:
+        async with self._lock:
+            return self._command

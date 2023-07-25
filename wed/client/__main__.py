@@ -1,7 +1,6 @@
-import multiprocessing
-import os
-import signal
+import asyncio
 
+import aiorun
 import fire
 
 from wed.client.telegram import TelegramTowerBuilder
@@ -9,46 +8,46 @@ from wed.client.telegram_creds import API_HASH, API_ID
 from wed.client.watcher import Watcher
 
 
-class Main:
-    def __call__(
-        self,
-        endpoint: str,
-        seconds_of_delay: int = 2,
-        chat_id: int = -984039342,
-    ) -> None:
-        telegram_tower_builder = TelegramTowerBuilder(
-            "wed",
-            API_ID,
-            API_HASH,
-            chat_id,
-        )
-        self_id_receiver, self_id_sender = multiprocessing.Pipe(duplex=False)
-        monitor_process = multiprocessing.Process(
-            target=telegram_tower_builder.monitor,
-            args=(self_id_sender,),
-        )
-        try:
-            monitor_process.start()
-            watcher = Watcher(
-                endpoint,
-                seconds_of_delay=seconds_of_delay,
-                social_media_id=self_id_receiver.recv(),
-                command_processor=telegram_tower_builder.process_command,
-            )
-            watcher()
-        except KeyboardInterrupt:
-            if monitor_process.pid is not None:
-                print("interrupt a process")
-                os.kill(monitor_process.pid, signal.SIGINT)
-                monitor_process.join(timeout=10)
-        finally:
-            if monitor_process.is_alive():
-                print("terminate a process")
-                monitor_process.terminate()
+async def main(
+    endpoint: str,
+    seconds_of_delay: int,
+    chat_id: int,
+) -> None:
+    telegram_tower_builder = TelegramTowerBuilder(
+        "wed",
+        API_ID,
+        API_HASH,
+        chat_id,
+    )
+    await telegram_tower_builder.start()
+    monitor_task = asyncio.create_task(telegram_tower_builder.monitor())
+    watcher = Watcher(
+        endpoint,
+        seconds_of_delay=seconds_of_delay,
+        social_media_id=await telegram_tower_builder.who_am_i(),
+        command_processor=telegram_tower_builder.process_command,
+    )
+    watcher_task = asyncio.create_task(watcher())
+    print("bb")
+    await asyncio.wait(
+        [
+            monitor_task,
+            watcher_task,
+        ],
+    )
+    print("cc")
+
+
+def sync_main(
+    endpoint: str,
+    seconds_of_delay: int = 2,
+    chat_id: int = -984039342,
+) -> None:
+    aiorun.run(main(endpoint, seconds_of_delay, chat_id), stop_on_unhandled_errors=True)
 
 
 if __name__ == "__main__":
     fire.core.Display = lambda lines, out: out.write(  # type: ignore
         "\n".join(lines) + "\n",
     )
-    fire.Fire(Main(), name="wed.client")
+    fire.Fire(sync_main, name="wed.client")
