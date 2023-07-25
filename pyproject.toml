@@ -10,6 +10,7 @@ python = "^3.10"
 pydantic = {extras = ["dotenv"], version = "^1.10.9"}
 fire = "^0.5.0"
 httpx = "^0.24.1"
+telethon = "^1.28.5"
 
 
 [tool.poetry.group.server.dependencies]
@@ -27,6 +28,7 @@ pyright = "^1.1.316"
 pre-commit = "^3.3.3"
 autoflake = "^2.2.0"
 ruff = "^0.0.280"
+ptpython = "^3.0.23"
 
 [tool.ruff]
 select = [

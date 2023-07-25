@@ -8,3 +8,6 @@ __pycache__/
 *.db
 *.db-wal
 *.db-shm
+
+*.session
+*.session-journal
