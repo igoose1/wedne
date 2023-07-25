@@ -4,6 +4,7 @@ import datetime
 import pytz
 import telethon
 
+from wed.client.consts import WRITE_FIRST_DELAY
 from wed.client.shared_commands import SharedCommand
 from wed.commands import CommandSchema
 
@@ -76,6 +77,7 @@ class TelegramTowerBuilder:
             await asyncio.sleep(
                 (command.when - datetime.datetime.now(pytz.utc)).seconds,
             )
+            await asyncio.sleep(WRITE_FIRST_DELAY.seconds)
             await self._client.send_message(self._chat_id, command.letter)
         else:
             # or wait for a necessary message in ChatMonitor

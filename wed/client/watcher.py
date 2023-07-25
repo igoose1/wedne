@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from functools import singledispatchmethod
@@ -12,7 +13,7 @@ from wed.commands import CommandSchema
 @dataclass
 class Watcher:
     endpoint: str
-    seconds_of_delay: int
+    delay: datetime.timedelta
     social_media_id: int
     command_processor: Callable[[CommandSchema], Awaitable[None]]
 
@@ -37,7 +38,7 @@ class Watcher:
                 await self.process(response)
             except httpx.ConnectError as exc:
                 await self.process(exc)
-            await asyncio.sleep(self.seconds_of_delay)
+            await asyncio.sleep(self.delay.seconds)
 
     @singledispatchmethod
     async def process(self, response: httpx.Response) -> None:

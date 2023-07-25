@@ -3,14 +3,13 @@ import asyncio
 import aiorun
 import fire
 
+from wed.client.consts import API_HASH, API_ID, WATCHING_DELAY
 from wed.client.telegram import TelegramTowerBuilder
-from wed.client.telegram_creds import API_HASH, API_ID
 from wed.client.watcher import Watcher
 
 
 async def main(
     endpoint: str,
-    seconds_of_delay: int,
     chat_id: int,
 ) -> None:
     telegram_tower_builder = TelegramTowerBuilder(
@@ -23,7 +22,7 @@ async def main(
     monitor_task = asyncio.create_task(telegram_tower_builder.monitor())
     watcher = Watcher(
         endpoint,
-        seconds_of_delay=seconds_of_delay,
+        delay=WATCHING_DELAY,
         social_media_id=await telegram_tower_builder.who_am_i(),
         command_processor=telegram_tower_builder.process_command,
     )
@@ -40,10 +39,9 @@ async def main(
 
 def sync_main(
     endpoint: str,
-    seconds_of_delay: int = 2,
     chat_id: int = -984039342,
 ) -> None:
-    aiorun.run(main(endpoint, seconds_of_delay, chat_id), stop_on_unhandled_errors=True)
+    aiorun.run(main(endpoint, chat_id), stop_on_unhandled_errors=True)
 
 
 if __name__ == "__main__":
