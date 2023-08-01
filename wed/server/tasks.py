@@ -12,7 +12,7 @@ from wed.utils import distinct_on
 job_queue = huey.SqliteHuey(str(settings.job_queue_database))
 
 
-@job_queue.task()
+@job_queue.task(priority=10)
 def create_new_visit(time: datetime, social_media_id: int) -> None:
     dao = VisitDAO()
     dao.create(time, social_media_id)
@@ -31,6 +31,7 @@ def choose_randoms_to_order(dao: VisitDAO) -> list[VisitModel]:
 
 @job_queue.periodic_task(
     huey.crontab(minute=f"*/{settings.minutes_to_order}", strict=True),
+    priority=20,
 )
 def order_new_commands() -> None:
     dao = VisitDAO()
