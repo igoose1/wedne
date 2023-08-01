@@ -27,14 +27,12 @@ async def main(
         command_processor=telegram_tower_builder.process_command,
     )
     watcher_task = asyncio.create_task(watcher())
-    print("bb")
     await asyncio.wait(
         [
             monitor_task,
             watcher_task,
         ],
     )
-    print("cc")
 
 
 def sync_main(
