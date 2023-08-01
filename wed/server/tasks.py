@@ -1,7 +1,5 @@
 import random
-from collections.abc import Callable, Hashable, Iterable, Sequence
 from datetime import datetime, timedelta
-from typing import TypeVar
 
 import huey
 import pytz
@@ -9,6 +7,7 @@ import pytz
 from wed.commands import CommandSchema
 from wed.server.db import VisitDAO, VisitModel
 from wed.server.settings import settings
+from wed.utils import distinct_on
 
 job_queue = huey.SqliteHuey(str(settings.job_queue_database))
 
@@ -17,14 +16,6 @@ job_queue = huey.SqliteHuey(str(settings.job_queue_database))
 def create_new_visit(time: datetime, social_media_id: int) -> None:
     dao = VisitDAO()
     dao.create(time, social_media_id)
-
-
-T_ = TypeVar("T_")
-
-
-def distinct_on(seq: Iterable[T_], key: Callable[[T_], Hashable]) -> Sequence[T_]:
-    unique: dict[Hashable, T_] = {key(element): element for element in seq}
-    return list(unique.values())
 
 
 def choose_randoms_to_order(dao: VisitDAO) -> list[VisitModel]:

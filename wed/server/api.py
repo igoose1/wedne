@@ -8,6 +8,7 @@ from wed.commands import CommandSchema, PreciseCommandSchema
 from wed.server.db import VisitDAO
 from wed.server.settings import settings
 from wed.server.tasks import create_new_visit
+from wed.utils import distinct_on
 
 app = fastapi.FastAPI()
 
@@ -36,4 +37,26 @@ def take_a_visit(
     return PreciseCommandSchema(
         expected_in=command.when - now,
         **command.dict(),
+    )
+
+
+class StatSchema(pydantic.BaseModel):
+    duration: timedelta
+    visits: int
+    unique_visits: int
+
+
+@app.get("/stat/")
+def get_statistics(
+    dao: VisitDAO = fastapi.Depends(),
+) -> StatSchema:
+    duration = timedelta(minutes=settings.minutes_of_last_activity)
+    active = dao.get_from(
+        datetime.now(pytz.utc) - duration,
+    )
+    unique = distinct_on(active, lambda vis: vis.social_media_id)
+    return StatSchema(
+        duration=duration,
+        visits=len(active),
+        unique_visits=len(unique),
     )
