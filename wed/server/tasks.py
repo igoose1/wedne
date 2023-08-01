@@ -10,7 +10,7 @@ from wed.commands import CommandSchema
 from wed.server.db import VisitDAO, VisitModel
 from wed.server.settings import settings
 
-job_queue = huey.SqliteHuey(settings.job_queue_database)
+job_queue = huey.SqliteHuey(str(settings.job_queue_database))
 
 
 @job_queue.task()

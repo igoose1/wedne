@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+
+.*.swp
+
+*.isorted
+
+.env
+
+*.db
+*.db-wal
+*.db-shm
+
+*.session
+*.session-journal

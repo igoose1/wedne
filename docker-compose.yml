@@ -1,0 +1,37 @@
+---
+version: '3.9'
+services:
+  api:
+    build: .
+    ports:
+    - ${WED_PORT}:${WED_PORT}
+    command: python -m wed.server run_api
+    environment:
+      WED_MINUTES_TO_ORDER: $WED_MINUTES_TO_ORDER
+      WED_SECONDS_OF_DELAY: $WED_SECONDS_OF_DELAY
+      WED_MINUTES_OF_LAST_ACTIVITY: $WED_MINUTES_OF_LAST_ACTIVITY
+      WED_TOWER: $WED_TOWER
+      WED_JOB_QUEUE_DATABASE: /var/wed/jobs.db
+      WED_APP_DATABASE: /var/wed/wed.db
+      WED_HOST: 0.0.0.0
+      WED_PORT: $WED_PORT
+    volumes:
+    - data:/var/wed
+
+  task-consumer:
+    build: .
+    command: python -m wed.server consume_tasks
+    environment:
+      WED_MINUTES_TO_ORDER: $WED_MINUTES_TO_ORDER
+      WED_SECONDS_OF_DELAY: $WED_SECONDS_OF_DELAY
+      WED_MINUTES_OF_LAST_ACTIVITY: $WED_MINUTES_OF_LAST_ACTIVITY
+      WED_TOWER: $WED_TOWER
+      WED_JOB_QUEUE_DATABASE: /var/wed/jobs.db
+      WED_APP_DATABASE: /var/wed/wed.db
+      WED_HOST: 127.0.0.1
+      WED_PORT: $WED_PORT
+    volumes:
+    - data:/var/wed
+
+volumes:
+  data:
