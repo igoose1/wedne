@@ -34,12 +34,12 @@ def get_handler(shared_command: SharedCommand):
 
 class ChatMonitor:
     def __init__(self, client: telethon.TelegramClient, shared_command: SharedCommand):
-        self._client = client
-        self._shared_command = shared_command
+        self.client = client
+        self.shared_command = shared_command
 
     async def __call__(self, chat_id: int) -> None:
-        self._client.add_event_handler(
-            callback=get_handler(self._shared_command),
+        self.client.add_event_handler(
+            callback=get_handler(self.shared_command),
             event=telethon.events.NewMessage(
                 chats=[chat_id],
                 incoming=True,
@@ -50,30 +50,28 @@ class ChatMonitor:
 
 class TelegramTowerBuilder:
     def __init__(self, session: str, api_id: int, api_hash: str, chat_id: int):
-        self._client = telethon.TelegramClient(
+        self.client = telethon.TelegramClient(
             session,
             api_id,
             api_hash,
         )
-        self._chat_id = chat_id
-        self._shared_command = SharedCommand()
-        self._who_am_i_cache: int | None = None
+        self.chat_id = chat_id
+        self.shared_command = SharedCommand()
 
     async def start(self) -> None:
-        await self._client.start()  # type: ignore
+        await self.client.start()  # type: ignore
 
     async def who_am_i(self) -> int:
-        return (await self._client.get_me()).id  # type: ignore
+        return (await self.client.get_me()).id  # type: ignore
 
     async def monitor(self) -> None:
-        await self.who_am_i()
-        await ChatMonitor(self._client, self._shared_command)(
-            self._chat_id,
+        await ChatMonitor(self.client, self.shared_command)(
+            self.chat_id,
         )
 
     async def process_command(self, command: CommandSchema | None):
         if command is None:
-            await self._shared_command.clear()
+            await self.shared_command.clear()
             return
         await asyncio.sleep(
             (command.when - datetime.datetime.now(pytz.utc)).seconds,
@@ -81,7 +79,7 @@ class TelegramTowerBuilder:
         if command.after is None:
             # if it's the first letter, wait here and write a message
             await asyncio.sleep(WRITE_FIRST_DELAY.seconds)
-            await self._client.send_message(self._chat_id, command.letter)
+            await self.client.send_message(self.chat_id, command.letter)
         else:
             # or wait for a necessary message in ChatMonitor
-            await self._shared_command.write(command)
+            await self.shared_command.write(command)
