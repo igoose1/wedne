@@ -44,6 +44,14 @@ docker run qwskr/wedne:latest
 docker compose up
 ```
 
+Без докера надо запустить API и обработчик задач:
+
+```sh
+python -m wedne.server run_api
+
+python -m wedne.server consume_tasks
+```
+
 ## FAQ
 
 ### Почему я должен входить в телеграм? Это безопасно?
