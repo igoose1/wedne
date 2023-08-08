@@ -1,4 +1,11 @@
-from wedne.utils import Backoffer
+from wedne.utils import Backoffer, distinct_on
+
+
+def test_distinct_on():
+    unique_roots = distinct_on([4, 5, 9], key=lambda x: int(x**0.5))
+    assert sorted(unique_roots) == [5, 9]
+    unique_roots = distinct_on([5, 4, 9], key=lambda x: int(x**0.5))
+    assert sorted(unique_roots) == [4, 9]
 
 
 def test_backoffer_smoke():
