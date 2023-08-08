@@ -33,6 +33,7 @@ pre-commit = "^3.3.3"
 autoflake = "^2.2.0"
 ruff = "^0.0.280"
 ptpython = "^3.0.23"
+pytest = "^7.4.0"
 
 [tool.ruff]
 select = [
@@ -66,6 +67,8 @@ select = [
 ignore = [
 	"TD003",
 ]
+[tool.ruff.per-file-ignores]
+"*_test.py" = ["S101", "PLR2004"]
 
 [build-system]
 requires = ["poetry-core"]

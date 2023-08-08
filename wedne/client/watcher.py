@@ -8,6 +8,7 @@ from importlib import metadata
 import httpx
 
 from wedne.commands import CommandSchema
+from wedne.utils import Backoffer
 
 
 @dataclass
@@ -16,6 +17,9 @@ class Watcher:
     delay: datetime.timedelta
     social_media_id: int
     command_processor: Callable[[CommandSchema | None], Awaitable[None]]
+
+    def __post_init__(self) -> None:
+        self.backoffer = Backoffer()
 
     async def __call__(self) -> None:
         version = metadata.version("wedne")
@@ -39,9 +43,10 @@ class Watcher:
                     json=data,
                 )
                 await self.process(response)
+                await asyncio.sleep(self.delay.seconds)
             except httpx.ConnectError as exc:
                 await self.process(exc)
-            await asyncio.sleep(self.delay.seconds)
+                await asyncio.sleep(self.backoffer.failed())
 
     @singledispatchmethod
     async def process(self, response: httpx.Response) -> None:
@@ -50,11 +55,15 @@ class Watcher:
 
         if response.is_server_error:
             print("Server error")
+            await asyncio.sleep(self.backoffer.failed())
             return
 
         if response.is_client_error:
             print("Client error, update me")
+            await asyncio.sleep(self.backoffer.failed())
             return
+
+        self.backoffer.succeeded()
 
         raw_command = response.json()
         command = CommandSchema.parse_obj(raw_command) if raw_command else None
