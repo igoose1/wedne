@@ -19,7 +19,10 @@ class Watcher:
 
     async def __call__(self) -> None:
         version = metadata.version("wedne")
-        client = httpx.AsyncClient(headers={"user-agent": f"wedne.client/{version}"})
+        client = httpx.AsyncClient(
+            headers={"user-agent": f"wedne.client/{version}"},
+            timeout=10,
+        )
         try:
             await self._watch(client)
         finally:
