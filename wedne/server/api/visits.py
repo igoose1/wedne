@@ -27,7 +27,7 @@ def take_a_visit(
         social_media_id=data.social_media_id,
     )
     raw_command = dao.get_command(
-        from_=now - timedelta(seconds=settings.seconds_of_delay),
+        from_=now - timedelta(seconds=settings.minutes_to_order),
         social_media_id=data.social_media_id,
     )
     if raw_command is None:
