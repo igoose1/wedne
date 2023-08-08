@@ -9,7 +9,7 @@ from wedne.server.db import VisitDAO, VisitModel
 from wedne.server.settings import settings
 from wedne.utils import distinct_on
 
-job_queue = huey.SqliteHuey(str(settings.job_queue_database))
+job_queue = huey.SqliteHuey(filename=settings.job_queue_database)
 
 
 @job_queue.task(priority=10)
