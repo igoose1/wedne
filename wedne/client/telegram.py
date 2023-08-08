@@ -4,9 +4,9 @@ import datetime
 import pytz
 import telethon
 
-from wed.client.consts import WRITE_FIRST_DELAY
-from wed.client.shared_commands import SharedCommand
-from wed.commands import CommandSchema
+from wedne.client.consts import WRITE_FIRST_DELAY
+from wedne.client.shared_commands import SharedCommand
+from wedne.commands import CommandSchema
 
 
 def get_handler(shared_command: SharedCommand):

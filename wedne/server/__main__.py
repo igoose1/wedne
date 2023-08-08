@@ -4,8 +4,8 @@ import fire
 import uvicorn
 from huey.consumer_options import ConsumerConfig
 
-from wed.server.settings import settings
-from wed.server.tasks import job_queue
+from wedne.server.settings import settings
+from wedne.server.tasks import job_queue
 
 
 class Main:
@@ -20,7 +20,7 @@ class Main:
         Server entrypoint
         """
         uvicorn.run(
-            "wed.server.api:app",
+            "wedne.server.api:app",
             host=settings.host,
             port=settings.port,
             reload=settings.reload,
@@ -48,4 +48,4 @@ if __name__ == "__main__":
     fire.core.Display = lambda lines, out: out.write(  # type: ignore
         "\n".join(lines) + "\n",
     )
-    fire.Fire(Main(), name="wed.server")
+    fire.Fire(Main(), name="wedne.server")

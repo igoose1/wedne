@@ -1,6 +1,6 @@
 import fastapi
 
-from wed.server.api import stats, visits
+from wedne.server.api import stats, visits
 
 app = fastapi.FastAPI()
 app.include_router(stats.router, prefix="/stats")

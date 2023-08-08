@@ -4,9 +4,9 @@ import fastapi
 import pydantic
 import pytz
 
-from wed.server.db import VisitDAO
-from wed.server.settings import settings
-from wed.utils import distinct_on
+from wedne.server.db import VisitDAO
+from wedne.server.settings import settings
+from wedne.utils import distinct_on
 
 router = fastapi.APIRouter()
 

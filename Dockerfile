@@ -14,6 +14,6 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock .
 RUN poetry install --no-ansi --without dev
 
-COPY wed /app/wed
+COPY wedne /app/wedne
 ENTRYPOINT ["poetry", "run"]
-CMD ["python", "-m", "wed.client"]
+CMD ["python", "-m", "wedne.client"]

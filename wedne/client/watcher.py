@@ -7,7 +7,7 @@ from importlib import metadata
 
 import httpx
 
-from wed.commands import CommandSchema
+from wedne.commands import CommandSchema
 
 
 @dataclass
@@ -18,8 +18,8 @@ class Watcher:
     command_processor: Callable[[CommandSchema | None], Awaitable[None]]
 
     async def __call__(self) -> None:
-        version = metadata.version("wed")
-        client = httpx.AsyncClient(headers={"user-agent": f"wed.client/{version}"})
+        version = metadata.version("wedne")
+        client = httpx.AsyncClient(headers={"user-agent": f"wedne.client/{version}"})
         try:
             await self._watch(client)
         finally:

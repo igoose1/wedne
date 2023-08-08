@@ -16,7 +16,7 @@ class Settings(pydantic.BaseSettings):
 
     class Config:
         env_file = ".env"
-        env_prefix = "wed_"
+        env_prefix = "wedne_"
 
 
 settings = Settings()  # type: ignore

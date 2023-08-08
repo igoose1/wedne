@@ -43,6 +43,6 @@ repos:
     name: Validate types with pyright
     entry: poetry run pyright
     pass_filenames: false
-    args: [wed]
+    args: [wedne]
     language: system
     types: [python]

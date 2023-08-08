@@ -1,6 +1,6 @@
 import asyncio
 
-from wed.commands import CommandSchema
+from wedne.commands import CommandSchema
 
 
 class SharedCommand:

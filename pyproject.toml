@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "wed"
+name = "wedne"
 version = "0.1.0"
 description = ""
 authors = ["Oskar Sharipov"]

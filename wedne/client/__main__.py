@@ -3,9 +3,9 @@ import asyncio
 import aiorun
 import fire
 
-from wed.client.consts import API_HASH, API_ID, WATCHING_DELAY
-from wed.client.telegram import TelegramTowerBuilder
-from wed.client.watcher import Watcher
+from wedne.client.consts import API_HASH, API_ID, WATCHING_DELAY
+from wedne.client.telegram import TelegramTowerBuilder
+from wedne.client.watcher import Watcher
 
 
 async def main(
@@ -13,7 +13,7 @@ async def main(
     chat_id: int,
 ) -> None:
     telegram_tower_builder = TelegramTowerBuilder(
-        "wed",
+        "wedne",
         API_ID,
         API_HASH,
         chat_id,
@@ -46,4 +46,4 @@ if __name__ == "__main__":
     fire.core.Display = lambda lines, out: out.write(  # type: ignore
         "\n".join(lines) + "\n",
     )
-    fire.Fire(sync_main, name="wed.client")
+    fire.Fire(sync_main, name="wedne.client")

@@ -4,10 +4,10 @@ import fastapi
 import pydantic
 import pytz
 
-from wed.commands import CommandSchema, PreciseCommandSchema
-from wed.server.db import VisitDAO
-from wed.server.settings import settings
-from wed.server.tasks import create_new_visit
+from wedne.commands import CommandSchema, PreciseCommandSchema
+from wedne.server.db import VisitDAO
+from wedne.server.settings import settings
+from wedne.server.tasks import create_new_visit
 
 router = fastapi.APIRouter()
 

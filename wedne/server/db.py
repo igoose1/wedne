@@ -7,7 +7,7 @@ from typing import Any
 import peewee
 from playhouse.sqlite_ext import JSONField
 
-from wed.server.settings import settings
+from wedne.server.settings import settings
 
 database = peewee.SqliteDatabase(settings.app_database, autoconnect=False)
 
