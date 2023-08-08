@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wedne"
-version = "0.1.1"
+version = "1.0.0"
 description = "Координируем строительство башни"
 authors = ["Oskar Sharipov"]
 readme = "README.md"
