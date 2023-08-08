@@ -9,7 +9,11 @@ from playhouse.sqlite_ext import JSONField
 
 from wedne.server.settings import settings
 
-database = peewee.SqliteDatabase(settings.app_database, autoconnect=False)
+database = peewee.SqliteDatabase(
+    settings.app_database,
+    autoconnect=False,
+    pragmas={"journal_mode": "wal"},
+)
 
 
 class AutoFieldType(int, peewee.AutoField):
