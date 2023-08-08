@@ -4,7 +4,7 @@ services:
   api:
     build: .
     ports:
-    - ${WEDNE_PORT}:${WEDNE_PORT}
+    - ${WEDNE_HOST}:${WEDNE_PORT}:${WEDNE_PORT}
     command: python -m wedne.server run_api
     environment:
       WEDNE_MINUTES_TO_ORDER: $WEDNE_MINUTES_TO_ORDER
