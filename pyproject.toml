@@ -9,19 +9,19 @@ repository = "https://github.com/igoose1/wedne"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = {extras = ["dotenv"], version = "^1.10.9"}
+pydantic = {extras = ["dotenv"], version = "^2.1.0"}
 fire = "^0.5.0"
 httpx = "^0.24.1"
 telethon = "^1.28.5"
 aiorun = "^2023.7.2"
 pytz = "^2023.3"
+pydantic-settings = "^2.0.2"
 
 
 [tool.poetry.group.server.dependencies]
-fastapi = "^0.100.0"
+fastapi = "^0.101.0"
 peewee = "^3.16.2"
 uvicorn = "^0.22.0"
-pydantic = "^1.10.9"
 huey = "^2.4.5"
 
 

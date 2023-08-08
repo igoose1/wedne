@@ -1,9 +1,9 @@
 from pathlib import Path
 
-import pydantic
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(pydantic.BaseSettings):
+class Settings(BaseSettings):
     minutes_to_order: int
     seconds_of_delay: int
     minutes_of_last_activity: int
@@ -13,10 +13,7 @@ class Settings(pydantic.BaseSettings):
     host: str
     port: int
     reload: bool = False
-
-    class Config:
-        env_file = ".env"
-        env_prefix = "wedne_"
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="wedne_")
 
 
 settings = Settings()  # type: ignore
