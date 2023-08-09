@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     minutes_of_last_activity: int
     app_database: Path
     job_queue_database: Path
-    tower: str = "ITSWEDNESDAYMYDUDES"
+    tower: str = "ITSWEDNESDAYMYDUDES!"
     host: str
     port: int
     reload: bool = False
