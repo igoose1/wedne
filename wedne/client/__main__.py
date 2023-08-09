@@ -11,6 +11,7 @@ from wedne.client.watcher import Watcher
 
 async def main(
     endpoint: str,
+    destroying: bool,
     chat_id: int,
 ) -> None:
     telegram_tower_builder = TelegramTowerBuilder(
@@ -20,7 +21,7 @@ async def main(
         chat_id,
     )
     await telegram_tower_builder.start()
-    monitor_task = asyncio.create_task(telegram_tower_builder.monitor())
+    monitor_task = asyncio.create_task(telegram_tower_builder.monitor(destroying))
     watcher = Watcher(
         endpoint,
         delay=WATCHING_DELAY,
@@ -38,10 +39,11 @@ async def main(
 
 def sync_main(
     endpoint: str,
+    destroying: bool = False,
     chat_id: int = -1001481658345,  # "Вастрик.Бар"
 ) -> None:
     print(metadata.version("wedne"))
-    aiorun.run(main(endpoint, chat_id), stop_on_unhandled_errors=True)
+    aiorun.run(main(endpoint, destroying, chat_id), stop_on_unhandled_errors=True)
 
 
 if __name__ == "__main__":

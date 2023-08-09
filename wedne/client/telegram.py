@@ -4,12 +4,12 @@ import datetime
 import pytz
 import telethon
 
-from wedne.client.consts import WRITE_FIRST_DELAY
+from wedne.client.consts import DESTROYING_TEXT, WRITE_FIRST_DELAY
 from wedne.client.shared_commands import SharedCommand
 from wedne.commands import CommandSchema
 
 
-def get_handler(shared_command: SharedCommand):
+def get_handler(shared_command: SharedCommand, destroying: bool):
     async def handler(event: telethon.events.NewMessage.Event) -> None:
         print(event)
         print(f"got new {type(event)}, btw, my task is", await shared_command.read())
@@ -26,7 +26,7 @@ def get_handler(shared_command: SharedCommand):
             # it's still early by letter order
             print("too early by letter order")
             return
-        await event.respond(command.letter)
+        await event.respond(command.letter if not destroying else DESTROYING_TEXT)
         await shared_command.clear()
 
     return handler
@@ -37,9 +37,9 @@ class ChatMonitor:
         self.client = client
         self.shared_command = shared_command
 
-    async def __call__(self, chat_id: int) -> None:
+    async def __call__(self, chat_id: int, destroying: bool) -> None:
         self.client.add_event_handler(
-            callback=get_handler(self.shared_command),
+            callback=get_handler(self.shared_command, destroying),
             event=telethon.events.NewMessage(
                 chats=[chat_id],
                 incoming=True,
@@ -64,9 +64,10 @@ class TelegramTowerBuilder:
     async def who_am_i(self) -> int:
         return (await self.client.get_me()).id  # type: ignore
 
-    async def monitor(self) -> None:
+    async def monitor(self, destroying: bool) -> None:
         await ChatMonitor(self.client, self.shared_command)(
             self.chat_id,
+            destroying,
         )
 
     async def process_command(self, command: CommandSchema | None):
