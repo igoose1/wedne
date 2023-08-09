@@ -73,6 +73,8 @@ class TelegramTowerBuilder:
         if command is None:
             await self.shared_command.clear()
             return
+        if command.when < datetime.datetime.now(pytz.utc):
+            return
         await asyncio.sleep(
             (command.when - datetime.datetime.now(pytz.utc)).total_seconds(),
         )
