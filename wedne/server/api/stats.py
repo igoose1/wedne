@@ -15,6 +15,7 @@ class StatSchema(pydantic.BaseModel):
     duration: timedelta
     visits: int
     unique_visits: int
+    tower: str
 
 
 @router.get("/")
@@ -30,4 +31,5 @@ def get_statistics(
         duration=duration,
         visits=len(active),
         unique_visits=len(unique),
+        tower=settings.tower,
     )
