@@ -26,7 +26,7 @@ def get_handler(shared_command: SharedCommand):
             # it's still early by letter order
             print("too early by letter order")
             return
-        await event.reply(command.letter)
+        await event.respond(command.letter)
         await shared_command.clear()
 
     return handler
