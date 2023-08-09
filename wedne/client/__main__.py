@@ -1,4 +1,5 @@
 import asyncio
+from importlib import metadata
 
 import aiorun
 import fire
@@ -39,6 +40,7 @@ def sync_main(
     endpoint: str,
     chat_id: int = -984039342,
 ) -> None:
+    print(metadata.version("wedne"))
     aiorun.run(main(endpoint, chat_id), stop_on_unhandled_errors=True)
 
 
