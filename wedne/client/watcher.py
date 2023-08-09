@@ -43,7 +43,7 @@ class Watcher:
                     json=data,
                 )
                 await self.process(response)
-                await asyncio.sleep(self.delay.seconds)
+                await asyncio.sleep(self.delay.total_seconds())
             except httpx.ConnectError as exc:
                 await self.process(exc)
                 await asyncio.sleep(self.backoffer.failed())

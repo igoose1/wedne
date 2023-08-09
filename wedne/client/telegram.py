@@ -74,11 +74,11 @@ class TelegramTowerBuilder:
             await self.shared_command.clear()
             return
         await asyncio.sleep(
-            (command.when - datetime.datetime.now(pytz.utc)).seconds,
+            (command.when - datetime.datetime.now(pytz.utc)).total_seconds(),
         )
         if command.after is None:
             # if it's the first letter, wait here and write a message
-            await asyncio.sleep(WRITE_FIRST_DELAY.seconds)
+            await asyncio.sleep(WRITE_FIRST_DELAY.total_seconds())
             await self.client.send_message(self.chat_id, command.letter)
         else:
             # or wait for a necessary message in ChatMonitor
