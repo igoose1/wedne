@@ -11,20 +11,15 @@ from wedne.commands import CommandSchema
 
 def get_handler(shared_command: SharedCommand, destroying: bool):
     async def handler(event: telethon.events.NewMessage.Event) -> None:
-        print(event)
-        print(f"got new {type(event)}, btw, my task is", await shared_command.read())
         command = await shared_command.read()
         if command is None:
             # no pending command
-            print("no pending")
             return
         if command.when > datetime.datetime.now(pytz.utc):
             # it's too early by time
-            print("too early by time")
             return
         if command.after is not None and command.after != event.from_id.user_id:
             # it's still early by letter order
-            print("too early by letter order")
             return
         await event.respond(command.letter if not destroying else DESTROYING_TEXT)
         await shared_command.clear()

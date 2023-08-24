@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from functools import singledispatchmethod
@@ -50,16 +51,16 @@ class Watcher:
 
     @singledispatchmethod
     async def process(self, response: httpx.Response) -> None:
-        print(response)
-        print(response.content)
-
+        logging.info("response: %s", response.text)
         if response.is_server_error:
-            print("Server error")
+            logging.warning("received a server error")
             await asyncio.sleep(self.backoffer.failed())
             return
 
         if response.is_client_error:
-            print("Client error, update me")
+            logging.warning(
+                "received a client error: probably you should update a package.",
+            )
             await asyncio.sleep(self.backoffer.failed())
             return
 
@@ -71,4 +72,4 @@ class Watcher:
 
     @process.register
     async def _(self, exception: httpx.ConnectError) -> None:
-        print(str(exception))
+        logging.error("connect error: %s", str(exception))
