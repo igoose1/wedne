@@ -3,8 +3,8 @@
 ![PyPI](https://img.shields.io/pypi/v/wedne)
 ![PyPI - License](https://img.shields.io/pypi/l/wedne)
 
-_This project was built for a Russian-speaking community. There's no English version of
-the README._
+_This project was built for a Russian-speaking community. An English version of this
+README is [available as well][README-EN]._
 
 В чатах "Вастрик Клуба" любят строить башни. Башни — это однобуквенные сообщения от
 участников, из которых может составиться слово. Самый важный башенный день — среда. В
@@ -90,6 +90,7 @@ wedne должен отправить букву в чат от какого-т�
 Кажется, вы не знаете про ["Вастрик Клуб"][club]. Этот проект написан для него. Если вы не
 участник, вам wedne будет бесполезен.
 
+[README-EN]: https://github.com/igoose1/wedne/blob/main/README-EN.md
 [py]: https://www.python.org/downloads/
 [chat]: https://vas3k.club/room/bar/chat/
 [club]: https://vas3k.club/
