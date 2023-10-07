@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "wedne"
-version = "1.1.5"
+version = "1.1.6"
 description = "Координируем строительство башни"
 authors = ["Oskar Sharipov"]
-readme = "README.md"
+readme = ["README.md", "README-EN.md"]
 license = "BSD-3-Clause"
 repository = "https://github.com/igoose1/wedne"
 
