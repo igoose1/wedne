@@ -5,13 +5,13 @@ services:
     build: .
     ports:
     - ${WEDNE_HOST}:${WEDNE_PORT}:${WEDNE_PORT}
-    command: python -m wedne.server run_api
+    command: python -m gunicorn -c wedne/server/gunicorn.py wedne.server.api:app
     environment:
       WEDNE_MINUTES_TO_ORDER: $WEDNE_MINUTES_TO_ORDER
       WEDNE_SECONDS_OF_DELAY: $WEDNE_SECONDS_OF_DELAY
       WEDNE_MINUTES_OF_LAST_ACTIVITY: $WEDNE_MINUTES_OF_LAST_ACTIVITY
       WEDNE_TOWER: $WEDNE_TOWER
-      WEDNE_JOB_QUEUE_DATABASE: /var/wedne/jobs.db
+      WEDNE_REDIS: redis://redis:6379/0
       WEDNE_APP_DATABASE: /var/wedne/wedne.db
       WEDNE_HOST: 0.0.0.0
       WEDNE_PORT: $WEDNE_PORT
@@ -26,12 +26,15 @@ services:
       WEDNE_SECONDS_OF_DELAY: $WEDNE_SECONDS_OF_DELAY
       WEDNE_MINUTES_OF_LAST_ACTIVITY: $WEDNE_MINUTES_OF_LAST_ACTIVITY
       WEDNE_TOWER: $WEDNE_TOWER
-      WEDNE_JOB_QUEUE_DATABASE: /var/wedne/jobs.db
+      WEDNE_REDIS: redis://redis:6379/0
       WEDNE_APP_DATABASE: /var/wedne/wedne.db
       WEDNE_HOST: 127.0.0.1
       WEDNE_PORT: $WEDNE_PORT
     volumes:
     - data:/var/wedne
+
+  redis:
+    image: redis:7.2-alpine
 
 volumes:
   data:

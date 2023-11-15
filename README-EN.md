@@ -51,7 +51,7 @@ docker compose up
 Without docker, you need to run the API and task handler:
 
 ```sh
-python -m wedne.server run_api
+python -m gunicorn -c wedne/server/gunicorn.py wedne.server.api:app
 
 python -m wedne.server consume_tasks
 ```

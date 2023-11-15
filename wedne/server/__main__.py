@@ -18,6 +18,8 @@ class Main:
     def run_api(self) -> None:
         """
         Server entrypoint
+
+        For development only. Use gunicorn for production.
         """
         uvicorn.run(
             "wedne.server.api:app",

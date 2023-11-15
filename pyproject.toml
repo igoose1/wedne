@@ -23,6 +23,8 @@ fastapi = "^0.101.0"
 peewee = "^3.16.2"
 uvicorn = "^0.22.0"
 huey = "^2.4.5"
+redis = "^5.0.1"
+gunicorn = "^21.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -34,6 +36,7 @@ autoflake = "^2.2.0"
 ruff = "^0.0.280"
 ptpython = "^3.0.23"
 pytest = "^7.4.0"
+gunicorn = "^21.2.0"
 
 [tool.ruff]
 select = [
