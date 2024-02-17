@@ -1,7 +1,8 @@
 # wedne: координируем строительство башни
 
 ![PyPI](https://img.shields.io/pypi/v/wedne)
-![PyPI - License](https://img.shields.io/pypi/l/wedne)
+![GitHub License](https://img.shields.io/github/license/igoose1/wedne)
+![Docker Image Version](https://img.shields.io/docker/v/qwskr/wedne)
 
 _This project was built for a Russian-speaking community. An English version of this
 README is [available as well][README-EN]._
