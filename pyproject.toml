@@ -24,7 +24,7 @@ peewee = "^3.16.2"
 uvicorn = "^0.22.0"
 huey = "^2.4.5"
 redis = "^5.0.1"
-gunicorn = "^21.2.0"
+gunicorn = "^22.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
