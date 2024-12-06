@@ -15,6 +15,7 @@ services:
       WEDNE_APP_DATABASE: /var/wedne/wedne.db
       WEDNE_HOST: 0.0.0.0
       WEDNE_PORT: $WEDNE_PORT
+      WEDNE_WORKERS: $WEDNE_WORKERS
     volumes:
     - data:/var/wedne
 
@@ -30,6 +31,7 @@ services:
       WEDNE_APP_DATABASE: /var/wedne/wedne.db
       WEDNE_HOST: 127.0.0.1
       WEDNE_PORT: $WEDNE_PORT
+      WEDNE_WORKERS: $WEDNE_WORKERS
     volumes:
     - data:/var/wedne
 

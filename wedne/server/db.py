@@ -12,7 +12,17 @@ from wedne.server.settings import settings
 database = peewee.SqliteDatabase(
     settings.app_database,
     autoconnect=False,
-    pragmas={"journal_mode": "wal"},
+    pragmas={
+        "journal_mode": "wal",
+        "synchronous": "normal",
+        "busy_timeout": 5000,
+        "cache_size": -20000,
+        "foreign_keys": True,
+        "auto_vacuum": "incremental",
+        "temp_store": "memory",
+        "mmap_size": 2147483648,
+        "page_size": 8192,
+    },
 )
 
 
